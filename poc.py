@@ -9,7 +9,7 @@ class HelloWorld:
         resp.text = "Hello World!"
         pass
 
-def main():
+def main(): 
     app = falcon.App()
 
     controller = HelloWorld()

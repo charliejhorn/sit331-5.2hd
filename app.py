@@ -1,4 +1,7 @@
 from wsgiref.simple_server import make_server
+from peewee import *
+
+db = SqliteDatabase('database.db')
 
 import falcon
 

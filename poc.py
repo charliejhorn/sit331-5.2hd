@@ -27,5 +27,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\nFuck you goodbye")
+        print("\nThe gallery is now closed :)")
         pass # good spot for any closing logic that might be needed, or a fuck you goodbye message

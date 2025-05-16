@@ -1,8 +1,5 @@
 from peewee import *
-# from app import db
-
-db = SqliteDatabase('database.db')
-
+from db import db
 
 class Person(Model):
     name = CharField()

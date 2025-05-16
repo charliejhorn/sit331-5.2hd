@@ -1,10 +1,8 @@
 from peewee import *
-from models import Person
-# from app import db
+from app.models import Person
+from connect import db
 
 allModels = [Person]
-
-db = SqliteDatabase('database.db')
 
 db.connect()
 

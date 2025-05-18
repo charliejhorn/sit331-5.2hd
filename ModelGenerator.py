@@ -63,7 +63,23 @@ def generate_models() -> dict[str, str]:
         model_files[camel_name] = f"{imports}\nclass {pascal_name}(Model):\n"
         
         for column in columns:
-            model_files[camel_name] += f"    {snake_case_to_camel_case(column[1])} = {map_type(column[2])}()\n"
+            col_name_camel = snake_case_to_camel_case(column[1])
+            col_type = map_type(column[2])
+            
+            # check if column is a foreign key
+            cursor.execute(f"PRAGMA foreign_key_list({name});")
+            foreign_keys = cursor.fetchall()
+            
+            is_foreign_key = False
+            for fk in foreign_keys:
+                if column[1] == fk[3]:  # 3 is the 'from' column
+                    is_foreign_key = True
+                    referenced_table_pascal = snake_case_to_pascal_case(fk[2]) # 2 is the 'table' column
+                    model_files[camel_name] += f"    {col_name_camel} = ForeignKeyField({referenced_table_pascal}, backref='{name}')\n"
+                    break
+            
+            if not is_foreign_key:
+                model_files[camel_name] += f"    {col_name_camel} = {col_type}()\n"
 
         model_files[camel_name] += f"\n"
         model_files[camel_name] += f"    class Meta:\n"

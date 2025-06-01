@@ -1,11 +1,12 @@
-from peewee import *
-from app.models import Person
-from connect import db
+import inspect
 
-allModels = [Person]
+import app.models
+
+from app.db import db
+
+allModels = [model for name, model in inspect.getmembers(app.models, inspect.isclass)]
+print(allModels)
 
 db.connect()
-
 db.create_tables(allModels)
-
 db.close()

@@ -1,2 +1,2 @@
-from connect import db
+from .connect import db
 __all__ = ['db']

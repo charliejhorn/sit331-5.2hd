@@ -1,4 +1,4 @@
-from app.db.connect import db
+from gallery.db.connect import db
 from peewee import *
 import json, os
 
@@ -96,10 +96,52 @@ def write_models_to_directory(models: dict[str, str], dir_path: str) -> None:
         with open(f"{dir_path}/{file_name}.py", "w") as f:
             f.write(content)
             print(f"Generated model file: {file_name}.py")
-    pass
+    
+    # generate __init__.py file
+    generate_init_file(models, dir_path)
+
+def generate_init_file(models: dict[str, str], dir_path: str) -> None:
+    """
+    Generate __init__.py file to make the directory a proper Python package.
+    """
+    
+    # extract class names from the models
+    class_names = []
+    file_names = []
+    
+    for file_name, content in models.items():
+        file_names.append(file_name)
+        # extract class name from the model content (find class definition)
+        lines = content.split('\n')
+        for line in lines:
+            if line.strip().startswith('class '):
+                class_name = line.split('class ')[1].split('(')[0].strip()
+                class_names.append(class_name)
+                break
+    
+    # create the __init__.py content
+    init_content = '"""\nGenerated models from database schema.\n"""\n\n'
+    
+    # add imports
+    init_content += "# import all model classes\n"
+    for i, file_name in enumerate(file_names):
+        class_name = class_names[i]
+        init_content += f"from .{file_name} import {class_name}\n"
+    
+    # add __all__ list
+    init_content += "\n# expose all classes for external imports\n"
+    init_content += "__all__ = [\n"
+    for class_name in class_names:
+        init_content += f'    "{class_name}",\n'
+    init_content += "]\n"
+    
+    # write the __init__.py file
+    with open(f"{dir_path}/__init__.py", "w") as f:
+        f.write(init_content)
+        print(f"Generated __init__.py file")
 
 if __name__ == "__main__":
     models = generate_models()
-    write_models_to_directory(models, "ModelGeneratorTesting")
+    write_models_to_directory(models, "app/ModelGeneratorTesting")
     # print(json.dumps(models, indent=4))
     pass

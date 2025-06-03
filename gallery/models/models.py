@@ -1,5 +1,5 @@
 import peewee as pw
-from app.db import db
+from gallery.db import db
 
 class _Base(pw.Model):
     class Meta:

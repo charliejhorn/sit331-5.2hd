@@ -1,6 +1,6 @@
 from peewee import *
 from datetime import date
-from app.models.models import Person
+from gallery.models.models import Person
 # from app import db
 
 db = SqliteDatabase('database.db')

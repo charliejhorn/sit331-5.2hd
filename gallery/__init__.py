@@ -5,4 +5,5 @@ from . import api
 __all__ = [
     "models",
     "api",
-    "db"]
+    "db"
+]

@@ -1,2 +1,7 @@
 from .connect import db
-__all__ = ['db']
+from .artifact import ArtifactDataAccess
+
+__all__ = [
+    'db',
+    'ArtifactDataAccess'
+]

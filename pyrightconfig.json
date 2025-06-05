@@ -1,0 +1,20 @@
+{
+  "include": [
+    "**/*.py" // Include all Python files in your project for analysis
+  ],
+  "exclude": [
+    "**/node_modules", // Standard exclusions
+    "**/__pycache__",
+    "**/.git",
+    "**/.venv",
+    "**/venv",
+    "**/.conda",
+    "**/.mypy_cache"
+  ],
+  "extraPaths": [
+    "./" // Tells Pyright to look for importable modules directly in the project root.
+        // Add more relative paths here if your top-level modules are in subdirectories
+        // (e.g., "./src" if your code is in a 'src' folder).
+  ],
+  "reportMissingImports": true // Essential: Pyright will warn if it can't find an imported module
+}

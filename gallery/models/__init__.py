@@ -11,19 +11,4 @@ from .models import Role
 from .models import User
 from .models import UserRoleJoin
 from .models import Comment
-__all__ = [
-    "Region",
-    "Tribe",
-    "Artist",
-    "Artifact",
-    "ArtifactType",
-    "ArtistArtifactJoin",
-    "Image",
-    "Exhibition",
-    "ExhibitionArtifactJoin",
-    "Role",
-    "User",
-    "UserRoleJoin" 
-    "Comment",
-    ]
 

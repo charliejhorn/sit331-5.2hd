@@ -7,7 +7,6 @@ from pprint import pprint
 class ArtifactDataAccess:
     def get_all_artifacts(self) -> list:
         return [model_to_dict(a) for a in Artifact.select()]
-
     def add_new_artifact(self, artifact: dict):
         artifact = dict_to_model(Artifact, artifact)
         return None 

@@ -1,0 +1,2 @@
+from .artifact import ArtifactResource
+

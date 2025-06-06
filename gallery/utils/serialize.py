@@ -2,7 +2,7 @@ import datetime
 from json import dumps
 
 def datetime_serializer(obj):
-    print("datetime_serializer: " + str(obj))
+    # print("datetime_serializer: " + str(obj))
     if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
         return obj.isoformat()
     raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable, by the way this was us")
@@ -14,7 +14,7 @@ def datetime_deserializer(obj):
             return datetime.datetime.fromisoformat(obj)
         except ValueError:
             pass
-    print(str(obj) + " was deserialized")
+    # print(str(obj) + " was deserialized")
     return obj
 
 

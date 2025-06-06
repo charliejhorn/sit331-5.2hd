@@ -1,2 +1,10 @@
 from .artifact_resource import ArtifactResource
-
+from .artifact_type_resource import ArtifactTypeResource
+from .artist_resource import ArtistResource
+from .comment_resource import CommentResource
+from .exhibition_resource import ExhibitionResource
+from .image_resource import ImageResource
+from .region_resource import RegionResource
+from .role_resource import RoleResource
+from .tribe_resource import TribeResource
+from .user_resource import UserResource

@@ -1,7 +1,7 @@
 from pprint import pprint
 from falcon import MEDIA_JSON, HTTP_200, HTTP_201
 
-class ArtifactResource:
+class RegionResource:
     def __init__(self, dal) -> None:
         self.dal = dal
 

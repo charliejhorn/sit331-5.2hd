@@ -1,0 +1,2 @@
+class ArtistDataAccess:
+    pass

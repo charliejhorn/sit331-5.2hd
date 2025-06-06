@@ -1,7 +1,11 @@
 from .connect import db
 from .artifact_da import ArtifactDataAccess
-
-__all__ = [
-    'db',
-    'ArtifactDataAccess'
-]
+from .artifact_type_da import ArtifactTypeDataAccess
+from .artist_da import ArtistDataAccess
+from .comment_da import CommentDataAccess
+from .exhibition_da import ExhibitionDataAccess
+from .image_da import ImageDataAccess
+from .region_da import RegionDataAccess
+from .role_da import RoleDataAccess
+from .tribe_da import TribeDataAccess
+from .user_da import UserDataAccess

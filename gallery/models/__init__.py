@@ -11,4 +11,5 @@ from .models import Role
 from .models import User
 from .models import UserRoleJoin
 from .models import Comment
+from .base_model import Base
 

@@ -7,9 +7,13 @@ class ArtifactDataAccess:
         models = [model_to_dict(a) for a in Artifact.select()]
         return models
 
-    def add_new_artifact(self, artifact: dict):
+    def add_new_artifact(self, artifact):
+
+        # set dates here
+
         artifact = dict_to_model(Artifact, artifact)
-        return None 
+        artifact.save()
+        return model_to_dict(artifact)
 
 
 if __name__ == "__main__":

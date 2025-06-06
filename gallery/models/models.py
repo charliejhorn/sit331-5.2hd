@@ -1,9 +1,10 @@
 import peewee as pw
 from gallery.db import db
+from .base_model import Base
 
-class _Base(pw.Model):
-    class Meta:
-        database = db  # This model uses the "database.db" database.
+# class Base(pw.Model):
+#     class Meta:
+#         database = db  # This model uses the "database.db" database.
 
 # example model
 # class Person(Model):
@@ -29,22 +30,22 @@ __all__ = [
     "Comment",
     ]
 
-class Region(_Base):
+class Region(Base):
     id = pw.AutoField()
     name = pw.TextField()
 
-class Tribe(_Base):
+class Tribe(Base):
     id = pw.AutoField()
     name = pw.TextField()
     region = pw.ForeignKeyField(Region, backref="tribes")
 
-class Artist(_Base):
+class Artist(Base):
     id = pw.AutoField()
     name = pw.TextField()
     region = pw.ForeignKeyField(Region, backref='artists')
     tribe = pw.ForeignKeyField(Tribe, backref='artists')
 
-class ArtifactType(_Base):
+class ArtifactType(Base):
     id = pw.AutoField()
     name = pw.TextField()
     description = pw.TextField(null=True)
@@ -52,7 +53,7 @@ class ArtifactType(_Base):
     class Meta:
         table_name = 'artifact_type'
 
-class Artifact(_Base):
+class Artifact(Base):
     id = pw.AutoField()
     title = pw.TextField()
     description = pw.TextField(null=True)
@@ -60,7 +61,7 @@ class Artifact(_Base):
     display_location = pw.TextField(null=True)
     artifact_type = pw.ForeignKeyField(ArtifactType, backref='artifacts', null=True)
 
-class ArtistArtifactJoin(_Base):
+class ArtistArtifactJoin(Base):
     artist = pw.ForeignKeyField(Artist, backref='artist_artifacts')
     artifact = pw.ForeignKeyField(Artifact, backref='artifact_artists')
 
@@ -71,7 +72,7 @@ class ArtistArtifactJoin(_Base):
         )
         primary_key = pw.CompositeKey('artist', 'artifact')
 
-class Image(_Base):
+class Image(Base):
     id = pw.AutoField()
     url = pw.TextField()  # URL to the image file
     height = pw.IntegerField(null=True)  # Height of the image in pixels
@@ -79,7 +80,7 @@ class Image(_Base):
     rights = pw.TextField(null=True)  # Rights information for the image
     artifact = pw.ForeignKeyField(Artifact, backref='images', null=True)  # Optional link to an artifact
 
-class Exhibition(_Base):
+class Exhibition(Base):
     id = pw.AutoField()
     name = pw.TextField()
     description = pw.TextField(null=True)
@@ -87,7 +88,7 @@ class Exhibition(_Base):
     end_date = pw.DateField()
     location = pw.TextField()
 
-class ExhibitionArtifactJoin(_Base):
+class ExhibitionArtifactJoin(Base):
     exhibition = pw.ForeignKeyField(Exhibition, backref='exhibition_artifacts')
     artifact = pw.ForeignKeyField(Artifact, backref='artifact_exhibitions')
 
@@ -98,12 +99,12 @@ class ExhibitionArtifactJoin(_Base):
         )
         primary_key = pw.CompositeKey('exhibition', 'artifact')
 
-class Role(_Base):
+class Role(Base):
     id = pw.AutoField()
     name = pw.TextField(unique=True)  
     description = pw.TextField(null=True) 
 
-class User(_Base):
+class User(Base):
     id = pw.AutoField()
     first_name = pw.TextField()
     last_name = pw.TextField() 
@@ -112,7 +113,7 @@ class User(_Base):
     password_hash = pw.TextField()  
     membership_type = pw.TextField()
 
-class UserRoleJoin(_Base):
+class UserRoleJoin(Base):
     user = pw.ForeignKeyField(User, backref='user_roles')
     role = pw.ForeignKeyField(Role, backref='role_users')
 
@@ -123,7 +124,7 @@ class UserRoleJoin(_Base):
         )
         primary_key = pw.CompositeKey('user', 'role')
 
-class Comment(_Base):
+class Comment(Base):
     id = pw.AutoField()
     content = pw.TextField()
     author = pw.ForeignKeyField(User, backref='comments')  # Link to the user who made the comment

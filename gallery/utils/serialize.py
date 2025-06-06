@@ -7,8 +7,6 @@ def datetime_serializer(obj):
         return obj.isoformat()
     raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable, by the way this was us")
 
-def serialize_dicts(dicts):
-    return dumps(dicts, default=datetime_serializer)
 
 def datetime_deserializer(obj):
     if isinstance(obj, str):
@@ -16,4 +14,9 @@ def datetime_deserializer(obj):
             return datetime.datetime.fromisoformat(obj)
         except ValueError:
             pass
+    print(str(obj) + " was deserialized")
     return obj
+
+
+def serialize_dicts(dicts):
+    return dumps(dicts, default=datetime_serializer)

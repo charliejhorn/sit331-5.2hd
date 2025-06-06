@@ -1,5 +1,5 @@
 from .connect import db
-from .artifact import ArtifactDataAccess
+from .artifact_da import ArtifactDataAccess
 
 __all__ = [
     'db',

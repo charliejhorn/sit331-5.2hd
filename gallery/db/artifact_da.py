@@ -1,12 +1,12 @@
 from gallery.models import Artifact
-import datetime
-import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
 from pprint import pprint
 
 class ArtifactDataAccess:
     def get_all_artifacts(self) -> list:
-        return [model_to_dict(a) for a in Artifact.select()]
+        models = [model_to_dict(a) for a in Artifact.select()]
+        return models
+
     def add_new_artifact(self, artifact: dict):
         artifact = dict_to_model(Artifact, artifact)
         return None 

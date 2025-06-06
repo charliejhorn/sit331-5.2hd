@@ -1,2 +1,2 @@
-from .artifact import ArtifactResource
+from .artifact_resource import ArtifactResource
 

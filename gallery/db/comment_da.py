@@ -18,5 +18,5 @@ class CommentDataAccess:
         return model_to_dict(Comment.get_by_id(id))
 
     def update_comment(self, comment):
-        Comment.update(comment).where(Comment.id = int(comment["id"]))
+        Comment.update(comment).where(Comment.id == int(comment["id"]))
 

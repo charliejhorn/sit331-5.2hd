@@ -44,7 +44,11 @@ app.add_route('/', HelloWorldResource())
 app.add_route('/api/artifacts', ArtifactResource(ArtifactDataAccess))
 app.add_route('/api/artifact-types', ArtifactTypeResource(ArtifactTypeDataAccess))
 app.add_route('/api/artists', ArtistResource(ArtistDataAccess))
+
 app.add_route('/api/comments', CommentResource(CommentDataAccess))
+app.add_route('/api/comments/{id}', CommentResource(CommentDataAccess), suffix='item')
+
+
 app.add_route('/api/exhibitions', ExhibitionResource(ExhibitionDataAccess))
 app.add_route('/api/images', ImageResource(ImageDataAccess))
 app.add_route('/api/regions', RegionResource(RegionDataAccess))

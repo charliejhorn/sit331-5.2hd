@@ -28,7 +28,7 @@ __all__ = [
     "ExhibitionArtifactJoin",
     "User",
     "Comment",
-    ]
+]
 
 class Region(Base):
     id = pw.AutoField()
@@ -50,7 +50,7 @@ class ArtifactType(Base):
     name = pw.TextField()
     description = pw.TextField(null=True)
 
-    class Meta:
+    class Meta: # Your lsp is gaslighting you this is fine
         table_name = 'artifact_type'
 
 class Artifact(Base):
@@ -130,7 +130,7 @@ class Comment(Base):
     author = pw.ForeignKeyField(User, backref='comments')  # Link to the user who made the comment
     artifact = pw.ForeignKeyField(Artifact, backref='comments')  # Optional link to an artifact
     date_posted = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')])  # Automatically set to current timestamp
-    parent_comment = pw.ForeignKeyField('self', backref='replies', null=True)  # Self-referential foreign key for replies
+    parent_comment = pw.ForeignKeyField('self', backref='comments', null=True)  # Self-referential foreign key for replies
 
     @property
     def is_top_level(self): # because i can't get generated properties to work with peewee 

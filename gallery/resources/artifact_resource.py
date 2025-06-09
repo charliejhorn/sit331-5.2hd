@@ -22,4 +22,18 @@ class ArtifactResource:
         resp.status = HTTP_201
         resp.media = createdArtifact
         resp.location = '/api/artifacts/' + createdArtifact["id"]
-        
+
+    def on_get_by_id(self, req, resp, id):
+        pass
+
+    def on_get_by_type(self, req, resp, artifact_type_id):
+        pass
+
+    def on_get_by_year(self, req, resp, year):
+        pass
+
+    def on_get_by_location(self, req, resp, display_location):
+        pass
+
+    def on_get_by_date(self, req, resp, start_date, end_date):
+        pass

@@ -33,24 +33,32 @@ __all__ = [
 class Region(Base):
     id = pw.AutoField()
     name = pw.TextField()
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
 class Tribe(Base):
     id = pw.AutoField()
     name = pw.TextField()
     region = pw.ForeignKeyField(Region, backref="tribes")
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
 class Artist(Base):
     id = pw.AutoField()
     name = pw.TextField()
     region = pw.ForeignKeyField(Region, backref='artists')
     tribe = pw.ForeignKeyField(Tribe, backref='artists')
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
 class ArtifactType(Base):
     id = pw.AutoField()
     name = pw.TextField()
     description = pw.TextField(null=True)
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
-    class Meta(Base.Meta): # Your lsp is gaslighting you this is fine
+    class Meta: # Your lsp is gaslighting you this is fine
         table_name = 'artifact_type'
 
 class Artifact(Base):
@@ -60,12 +68,16 @@ class Artifact(Base):
     date_authored = pw.DateField(null=True) # authored specified to not confuse with a possible create_date for db objects
     display_location = pw.TextField(null=True)
     artifact_type = pw.ForeignKeyField(ArtifactType, backref='artifacts', null=True)
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
 class ArtistArtifactJoin(Base):
     artist = pw.ForeignKeyField(Artist, backref='artist_artifacts')
     artifact = pw.ForeignKeyField(Artifact, backref='artifact_artists')
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
-    class Meta(Base.Meta):
+    class Meta:
         table_name = 'artist_artifact_join'
         indexes = (
             (('artist', 'artifact'), True),  # Unique constraint on artist and artifact
@@ -79,6 +91,8 @@ class Image(Base):
     width = pw.IntegerField(null=True)  # Width of the image in pixels
     rights = pw.TextField(null=True)  # Rights information for the image
     artifact = pw.ForeignKeyField(Artifact, backref='images', null=True)  # Optional link to an artifact
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
 class Exhibition(Base):
     id = pw.AutoField()
@@ -91,8 +105,10 @@ class Exhibition(Base):
 class ExhibitionArtifactJoin(Base):
     exhibition = pw.ForeignKeyField(Exhibition, backref='exhibition_artifacts')
     artifact = pw.ForeignKeyField(Artifact, backref='artifact_exhibitions')
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
-    class Meta(Base.Meta):
+    class Meta:
         table_name = 'exhibition_artifact_join'
         indexes = (
             (('exhibition', 'artifact'), True),  # Unique constraint on exhibition and artifact
@@ -103,6 +119,8 @@ class Role(Base):
     id = pw.AutoField()
     name = pw.TextField(unique=True)  
     description = pw.TextField(null=True) 
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
 class User(Base):
     id = pw.AutoField()
@@ -111,13 +129,16 @@ class User(Base):
     username = pw.TextField(unique=True)
     email = pw.TextField(unique=True)  
     password_hash = pw.TextField()  
-    membership_type = pw.TextField()
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
 class UserRoleJoin(Base):
     user = pw.ForeignKeyField(User, backref='user_roles')
     role = pw.ForeignKeyField(Role, backref='role_users')
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
-    class Meta(Base.Meta):
+    class Meta:
         table_name = 'user_role_join'
         indexes = (
             (('user', 'role'), True),  # Unique constraint on user and role
@@ -131,6 +152,8 @@ class Comment(Base):
     artifact = pw.ForeignKeyField(Artifact, backref='comments')  # Optional link to an artifact
     date_posted = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')])  # Automatically set to current timestamp
     parent_comment = pw.ForeignKeyField('self', backref='comments', null=True)  # Self-referential foreign key for replies
+    created_datetime = pw.DateTimeField()
+    modified_datetime = pw.DateTimeField()
 
     @property
     def is_top_level(self): # because i can't get generated properties to work with peewee 

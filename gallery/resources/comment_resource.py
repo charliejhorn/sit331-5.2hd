@@ -1,5 +1,6 @@
 from pprint import pprint
-from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204
+from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204, HTTP_409, HTTP_500
+from gallery.utils import NotFoundException, DuplicateException
 
 class CommentResource:
     def __init__(self, dal) -> None:
@@ -15,15 +16,22 @@ class CommentResource:
  
     def on_post(self, req, resp):
         # create new comment
-        new_comment = req.get_media()
-        pprint(new_comment)
-        
-        created_comment = self.dal.add_new_comment(new_comment)
-        
-        resp.content_type = MEDIA_JSON
-        resp.status = HTTP_201
-        resp.media = created_comment
-        resp.location = '/api/comments/' + str(created_comment["id"])
+        try:
+            new_comment = req.get_media()
+            
+            created_comment = self.dal.add_new_comment(new_comment)
+            
+            resp.content_type = MEDIA_JSON
+            resp.status = HTTP_201
+            resp.media = created_comment
+            resp.location = '/api/comments/' + str(created_comment["id"])
+        except DuplicateException as e:
+            resp.status = HTTP_409
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
+
 
     def on_get_by_id(self, req, resp, id):
         # get comment by id
@@ -32,10 +40,13 @@ class CommentResource:
             resp.content_type = MEDIA_JSON
             resp.status = HTTP_200
             resp.media = comment
-        except Exception:
+        except NotFoundException as e:
             resp.status = HTTP_404
-            resp.media = {"error": "Comment not found"}
-
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
+        
     def on_put_by_id(self, req, resp, id):
         # update comment by id
         try:
@@ -44,18 +55,27 @@ class CommentResource:
             resp.content_type = MEDIA_JSON
             resp.status = HTTP_200
             resp.media = updated_comment
-        except Exception:
+        except NotFoundException as e: 
             resp.status = HTTP_404
-            resp.media = {"error": "Comment not found"}
+            resp.media = {"error": str(e)}
+        except DuplicateException as e:
+            resp.status = HTTP_409
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
 
     def on_delete_by_id(self, req, resp, id):
         # delete comment by id
         try:
             self.dal.delete_comment_by_id(id)
             resp.status = HTTP_204
-        except Exception:
+        except NotFoundException as e:  
             resp.status = HTTP_404
-            resp.media = {"error": "Comment not found"}
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
 
     def on_get_by_artifact(self, req, resp, artifact_id):
         # get comments by artifact

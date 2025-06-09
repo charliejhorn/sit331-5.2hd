@@ -101,3 +101,17 @@ class ArtifactResource:
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_200
         resp.media = artifacts
+
+    def on_get_by_artist(self, req, resp, artist_id):
+        # get artifacts by artist
+        artifacts = self.dal.get_artifacts_by_artist(artist_id)
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = artifacts
+
+    def on_get_by_exhibition(self, req, resp, exhibition_id):
+        # get artifacts by exhibition
+        artifacts = self.dal.get_artifacts_by_exhibition(exhibition_id)
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = artifacts

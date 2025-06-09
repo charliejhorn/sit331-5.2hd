@@ -56,4 +56,11 @@ class RoleResource:
         except Exception:
             resp.status = HTTP_404
             resp.media = {"error": "Role not found"}
+
+    def on_get_by_user(self, req, resp, user_id):
+        # get roles by user
+        artists = self.dal.get_roles_by_user(user_id)
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = artists
         

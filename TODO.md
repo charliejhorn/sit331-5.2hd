@@ -3,8 +3,8 @@
 ## MVP
 - [ ] Authentication (OAuth 2.0)
 - [ ] Authorization
-- [ ] documentation (doxygen or falcon provided/recommended)
 - [ ] full testing
+- [ ] documentation (doxygen or falcon provided/recommended)
 - [ ] salting via google images (it'd be funny)
  
 ## Bounded Contexts

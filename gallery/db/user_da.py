@@ -1,4 +1,4 @@
-from gallery.models import User, Role, UserRoleJoin
+from gallery.models import User, Role, UserRoleThrough
 from playhouse.shortcuts import model_to_dict, dict_to_model
 from peewee import DoesNotExist, IntegrityError
 from gallery.utils import NotFoundException, DuplicateException
@@ -73,7 +73,7 @@ class UserDataAccess:
         # Join User with UserRoleJoin and Role to filter by role name
         users = (User
                 .select()
-                .join(UserRoleJoin)
+                .join(UserRoleThrough)
                 .join(Role)
                 .where(Role.name == role))
         return [model_to_dict(u) for u in users]

@@ -51,6 +51,8 @@ app.add_route('/api/artifacts?type={artifact_type_id:int}', ArtifactResource(Art
 app.add_route('/api/artifacts?year={year:int}', ArtifactResource(ArtifactDataAccess()), suffix='by_year') 
 app.add_route('/api/artifacts?display_location={display_location}', ArtifactResource(ArtifactDataAccess()), suffix='by_location') 
 app.add_route('/api/artifacts?start_date={start_date}&end_date={end_date}', ArtifactResource(ArtifactDataAccess()), suffix='by_date') 
+app.add_route('/api/artifacts?artist={artist_id:int}', ArtifactResource(ArtifactDataAccess()), suffix='by_artist') 
+app.add_route('/api/artifacts?exhibition={exhibition_id:int}', ArtifactResource(ArtifactDataAccess()), suffix='by_exhibition') 
 
 # artifact types
 app.add_route('/api/artifact-types', ArtifactTypeResource(ArtifactTypeDataAccess()))
@@ -61,6 +63,7 @@ app.add_route('/api/artists', ArtistResource(ArtistDataAccess()))
 app.add_route('/api/artists/{id:int}', ArtistResource(ArtistDataAccess()), suffix='by_id') 
 app.add_route('/api/artists?region={region_id:int}', ArtistResource(ArtistDataAccess()), suffix='by_region')
 app.add_route('/api/artists?tribe={tribe_id:int}', ArtistResource(ArtistDataAccess()), suffix='by_tribe')
+app.add_route('/api/artists?artifact={artifact_id:int}', ArtistResource(ArtistDataAccess()), suffix='by_artifact')
 
 # comments
 app.add_route('/api/comments', CommentResource(CommentDataAccess())) 
@@ -76,6 +79,7 @@ app.add_route('/api/exhibitions', ExhibitionResource(ExhibitionDataAccess()))
 app.add_route('/api/exhibitions/{id:int}', ExhibitionResource(ExhibitionDataAccess()), suffix='by_id') 
 app.add_route('/api/exhibitions?date={date}', ExhibitionResource(ExhibitionDataAccess()), suffix='by_date') 
 app.add_route('/api/exhibitions?location={location}', ExhibitionResource(ExhibitionDataAccess()), suffix='by_location') 
+app.add_route('/api/exhibitions?artifact={artifact_id:int}', ExhibitionResource(ExhibitionDataAccess()), suffix='by_artifact') 
 
 # images
 app.add_route('/api/images', ImageResource(ImageDataAccess()))
@@ -89,6 +93,7 @@ app.add_route('/api/regions/{id:int}', RegionResource(RegionDataAccess()), suffi
 # roles
 app.add_route('/api/roles', RoleResource(RoleDataAccess()))
 app.add_route('/api/roles/{id:int}', RoleResource(RoleDataAccess()), suffix='by_id')
+app.add_route('/api/roles?user={user_id:int}', RoleResource(RoleDataAccess()), suffix='by_user')
 
 # tribes
 app.add_route('/api/tribes', TribeResource(TribeDataAccess()))
@@ -107,4 +112,5 @@ if __name__ == "__main__":
     with make_server('', 8000, app) as httpd:
         print("Open wide, come inside, the server's ready!")
         httpd.serve_forever()
+        pass
     pass

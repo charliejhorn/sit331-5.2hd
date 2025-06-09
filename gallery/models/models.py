@@ -4,7 +4,6 @@ from .base_model import Base
 from peewee import ManyToManyField
 
 __all__ = [
-    "Base",
     "Region",
     "Tribe",
     "Artist",
@@ -13,7 +12,10 @@ __all__ = [
     "Image",
     "Exhibition",
     "User",
-    "Comment",  # Removed ExhibitionArtifactJoin from __all__
+    "Comment",
+    "ArtifactArtistThrough",
+    "UserRoleThrough",
+    "ExhibitionArtifactThrough"
 ]
 
 class Region(Base):
@@ -111,4 +113,4 @@ class Comment(Base):
 # After all model definitions, initialize the M2M tables
 ArtifactArtistThrough = Artifact.artists.get_through_model()
 UserRoleThrough = User.roles.get_through_model()
-ExhibitionArtifactThrough = Exhibition.artifacts.get_through_model()  # Add this line
+ExhibitionArtifactThrough = Exhibition.artifacts.get_through_model()

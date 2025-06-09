@@ -90,3 +90,10 @@ class ArtistResource:
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_200
         resp.media = artists
+
+    def on_get_by_artifact(self, req, resp, artifact_id):
+        # get artists by artifact
+        artists = self.dal.get_artists_by_artifact(artifact_id)
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = artists

@@ -1,10 +1,13 @@
 from pprint import pprint
+import falcon
 from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204, HTTP_409, HTTP_500
 from gallery.utils import NotFoundException, DuplicateException
+from gallery.auth import Authorize
 
+@falcon.before(Authorize(['Admin']))
 class RoleResource:
     def __init__(self, dal) -> None:
-        self.dal = dal()
+        self.dal = dal
 
     def on_get(self, req, resp):
         # get all roles

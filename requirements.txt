@@ -1,6 +1,4 @@
-Authlib==1.6.0
-cffi==1.17.1
-cryptography==45.0.3
+bcrypt==4.3.0
 falcon==4.0.2
 falcon-auth==1.1.0
 gunicorn==23.0.0
@@ -9,7 +7,6 @@ nodeenv==1.9.1
 packaging==25.0
 peewee==3.18.1
 pluggy==1.6.0
-pycparser==2.22
 Pygments==2.19.1
 PyJWT==2.10.1
 pyright==1.1.401

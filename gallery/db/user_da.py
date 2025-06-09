@@ -85,3 +85,11 @@ class UserDataAccess:
             return model_to_dict(user)
         except DoesNotExist:
             raise NotFoundException("user", email)
+
+    def get_user_by_username(self, username):
+        """Get a user by username"""
+        try:
+            user = User.get(User.username == username)
+            return model_to_dict(user)
+        except DoesNotExist:
+            raise NotFoundException("user", username)

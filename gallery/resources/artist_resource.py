@@ -1,10 +1,13 @@
 from pprint import pprint
+import falcon
 from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204, HTTP_409, HTTP_500
 from gallery.utils import NotFoundException, DuplicateException
+from gallery.auth import Authorize
 
+@falcon.before(Authorize(['Viewer', 'Editor', 'Admin']))
 class ArtistResource:
     def __init__(self, dal) -> None:
-        self.dal = dal()
+        self.dal = dal
 
     def on_get(self, req, resp):
         # get all artists
@@ -14,6 +17,7 @@ class ArtistResource:
         resp.status = HTTP_200
         resp.media = artists 
 
+    @falcon.before(Authorize(['Editor', 'Admin']))
     def on_post(self, req, resp):
         # create new artist
         try:
@@ -47,6 +51,7 @@ class ArtistResource:
             resp.status = HTTP_500
             resp.media = {"error": "Internal server error"}
 
+    @falcon.before(Authorize(['Editor', 'Admin']))
     def on_put_by_id(self, req, resp, id):
         # update artist by id
         try:
@@ -65,6 +70,7 @@ class ArtistResource:
             resp.status = HTTP_500
             resp.media = {"error": "Internal server error"}
 
+    @falcon.before(Authorize(['Admin']))
     def on_delete_by_id(self, req, resp, id):
         # delete artist by id
         try:

@@ -1,10 +1,13 @@
+import falcon
 from pprint import pprint
 from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204, HTTP_409, HTTP_500
 from gallery.utils import NotFoundException, DuplicateException
+from gallery.auth import Authorize
 
+@falcon.before(Authorize(['Viewer', 'Editor', 'Admin']))
 class ArtifactResource:
     def __init__(self, dal) -> None:
-        self.dal = dal()
+        self.dal = dal
 
     def on_get(self, req, resp):
         artifacts = self.dal.get_all_artifacts()
@@ -13,6 +16,7 @@ class ArtifactResource:
         resp.status = HTTP_200
         resp.media = artifacts
 
+    @falcon.before(Authorize(['Editor', 'Admin']))
     def on_post(self, req, resp):
         newArtifact = req.get_media()
         pprint(newArtifact)
@@ -44,6 +48,7 @@ class ArtifactResource:
             resp.status = HTTP_500
             resp.media = {"error": "Internal server error"}
 
+    @falcon.before(Authorize(['Editor', 'Admin']))
     def on_put_by_id(self, req, resp, id):
         # update artifact by id
         try:
@@ -62,6 +67,7 @@ class ArtifactResource:
             resp.status = HTTP_500
             resp.media = {"error": "Internal server error"}
 
+    @falcon.before(Authorize(['Admin']))
     def on_delete_by_id(self, req, resp, id):
         # delete artifact by id
         try:

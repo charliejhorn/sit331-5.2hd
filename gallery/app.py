@@ -1,14 +1,16 @@
 import falcon
+from falcon import media
+
 import datetime
 import json
 from functools import partial
-from falcon import media
 
 from gallery.db import ArtifactDataAccess, ArtifactTypeDataAccess, ArtistDataAccess, CommentDataAccess, ExhibitionDataAccess, \
     ImageDataAccess, RegionDataAccess, RoleDataAccess, TribeDataAccess, UserDataAccess
 from gallery.resources import ArtifactResource, ArtifactTypeResource, ArtistResource, CommentResource, ExhibitionResource, \
     ImageResource, RegionResource, RoleResource, TribeResource, UserResource
 from gallery.utils import datetime_serializer, datetime_deserializer
+from gallery.auth import auth_middleware
 
 class HelloWorldResource:
     def on_get(self, req, resp):
@@ -31,7 +33,8 @@ extra_handlers = {
     'application/json': json_handler,
 }
 
-app = application = falcon.App()
+# create the Falcon application
+app = application = falcon.App(middleware=[auth_middleware])
 
 # register datetime serialization handlers
 app.resp_options.media_handlers.update(extra_handlers)

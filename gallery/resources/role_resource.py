@@ -1,5 +1,6 @@
 from pprint import pprint
-from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204
+from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204, HTTP_409, HTTP_500
+from gallery.utils import NotFoundException, DuplicateException
 
 class RoleResource:
     def __init__(self, dal) -> None:
@@ -15,15 +16,22 @@ class RoleResource:
 
     def on_post(self, req, resp):
         # create new role
-        new_role = req.get_media()
-        pprint(new_role)
-        
-        created_role = self.dal.add_new_role(new_role)
-        
-        resp.content_type = MEDIA_JSON
-        resp.status = HTTP_201
-        resp.media = created_role
-        resp.location = '/api/roles/' + str(created_role["id"])
+        try:
+            new_role = req.get_media()
+            pprint(new_role)
+            
+            created_role = self.dal.add_new_role(new_role)
+            
+            resp.content_type = MEDIA_JSON
+            resp.status = HTTP_201
+            resp.media = created_role
+            resp.location = '/api/roles/' + str(created_role["id"])
+        except DuplicateException as e:
+            resp.status = HTTP_409
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
 
     def on_get_by_id(self, req, resp, id):
         # get role by id
@@ -32,9 +40,12 @@ class RoleResource:
             resp.content_type = MEDIA_JSON
             resp.status = HTTP_200
             resp.media = role
-        except Exception:
+        except NotFoundException as e:
             resp.status = HTTP_404
-            resp.media = {"error": "Role not found"}
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
 
     def on_put_by_id(self, req, resp, id):
         # update role by id
@@ -44,23 +55,32 @@ class RoleResource:
             resp.content_type = MEDIA_JSON
             resp.status = HTTP_200
             resp.media = updated_role
-        except Exception:
+        except NotFoundException as e:
             resp.status = HTTP_404
-            resp.media = {"error": "Role not found"}
+            resp.media = {"error": str(e)}
+        except DuplicateException as e:
+            resp.status = HTTP_409
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
 
     def on_delete_by_id(self, req, resp, id):
         # delete role by id
         try:
             self.dal.delete_role_by_id(id)
             resp.status = HTTP_204
-        except Exception:
+        except NotFoundException as e:
             resp.status = HTTP_404
-            resp.media = {"error": "Role not found"}
+            resp.media = {"error": str(e)}
+        except Exception as e:
+            resp.status = HTTP_500
+            resp.media = {"error": "Internal server error"}
 
     def on_get_by_user(self, req, resp, user_id):
         # get roles by user
-        artists = self.dal.get_roles_by_user(user_id)
+        roles = self.dal.get_roles_by_user(user_id)
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_200
-        resp.media = artists
+        resp.media = roles
         

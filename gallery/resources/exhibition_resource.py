@@ -4,7 +4,7 @@ from gallery.utils import NotFoundException, DuplicateException
 
 class ExhibitionResource:
     def __init__(self, dal) -> None:
-        self.dal = dal
+        self.dal = dal()
 
     def on_get(self, req, resp):
         # get all exhibitions
@@ -78,13 +78,22 @@ class ExhibitionResource:
             resp.media = {"error": "Internal server error"}
 
     def on_get_by_date(self, req, resp, date):
-        # get exhibition by date
-        pass
+        # get exhibitions by date
+        exhibitions = self.dal.get_exhibitions_by_date(date)
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = exhibitions
 
     def on_get_by_location(self, req, resp, location):
-        # get exhibition by location
-        pass
+        # get exhibitions by location
+        exhibitions = self.dal.get_exhibitions_by_location(location)
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = exhibitions
 
     def on_get_by_artifact(self, req, resp, artifact_id):
-        # get exhibition by artifact
-        pass
+        # get exhibitions by artifact
+        exhibitions = self.dal.get_exhibitions_by_artifact(artifact_id)
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = exhibitions

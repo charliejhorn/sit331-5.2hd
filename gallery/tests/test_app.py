@@ -22,9 +22,11 @@ def test_root(client):
 def test_get_artifacts(client):
     response = client.get('/api/artifacts')
     
+    assert response.status != falcon.HTTP_500
+
     artifacts = response.json
 
     for a in artifacts:
         assert dict_to_model(Artifact, a) != None
-    
+
     assert response.status == falcon.HTTP_OK

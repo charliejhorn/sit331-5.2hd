@@ -38,23 +38,41 @@ app = application = falcon.App()
 app.resp_options.media_handlers.update(extra_handlers)
 app.req_options.media_handlers.update(extra_handlers)
 
+# sample URLs
+# filtering:     https://gw.api.gov.au/e09284/v1/employees?year=2011&sort=desc
+# single entity: https://gw.api.gov.au/e09284/v1/employees/0d047d80-eb69-4665-9395-6df5a5e569a4
+
 # add routes
 app.add_route('/', HelloWorldResource())
 
+<<<<<<< HEAD
 app.add_route('/api/artifacts', ArtifactResource(ArtifactDataAccess))
 app.add_route('/api/artifact-types', ArtifactTypeResource(ArtifactTypeDataAccess))
 app.add_route('/api/artists', ArtistResource(ArtistDataAccess))
 
 app.add_route('/api/comments', CommentResource(CommentDataAccess))
 app.add_route('/api/comments/{id}', CommentResource(CommentDataAccess), suffix='_item')
+=======
+app.add_route('/api/artifacts', ArtifactResource(ArtifactDataAccess())) # all artifacts
+app.add_route('/api/artifacts/{id:int}', ArtifactResource(ArtifactDataAccess())) # singular artifact
+app.add_route('/api/artifacts?artifact-type={artifact_type_id:int}', ArtifactResource(ArtifactDataAccess())) # artifacts by artifact-type
+app.add_route('/api/artifacts?year={year:int}', ArtifactResource(ArtifactDataAccess())) # artifacts by year
+>>>>>>> refs/remotes/origin/main
 
 
-app.add_route('/api/exhibitions', ExhibitionResource(ExhibitionDataAccess))
-app.add_route('/api/images', ImageResource(ImageDataAccess))
-app.add_route('/api/regions', RegionResource(RegionDataAccess))
-app.add_route('/api/roles', RoleResource(RoleDataAccess))
-app.add_route('/api/tribes', TribeResource(TribeDataAccess))
-app.add_route('/api/users', UserResource(UserDataAccess))
+app.add_route('/api/artifact-types', ArtifactTypeResource(ArtifactTypeDataAccess()))
+app.add_route('/api/artists', ArtistResource(ArtistDataAccess()))
+
+app.add_route('/api/comments', CommentResource(CommentDataAccess()))
+app.add_route('/api/comments/{id}', CommentResource(CommentDataAccess()), suffix='_item')
+
+
+app.add_route('/api/exhibitions', ExhibitionResource(ExhibitionDataAccess()))
+app.add_route('/api/images', ImageResource(ImageDataAccess()))
+app.add_route('/api/regions', RegionResource(RegionDataAccess()))
+app.add_route('/api/roles', RoleResource(RoleDataAccess()))
+app.add_route('/api/tribes', TribeResource(TribeDataAccess()))
+app.add_route('/api/users', UserResource(UserDataAccess()))
 
 if __name__ == "__main__":
     with make_server('', 8000, app) as httpd:

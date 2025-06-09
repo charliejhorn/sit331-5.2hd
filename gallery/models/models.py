@@ -50,7 +50,7 @@ class ArtifactType(Base):
     name = pw.TextField()
     description = pw.TextField(null=True)
 
-    class Meta: # Your lsp is gaslighting you this is fine
+    class Meta(Base.Meta): # Your lsp is gaslighting you this is fine
         table_name = 'artifact_type'
 
 class Artifact(Base):
@@ -65,7 +65,7 @@ class ArtistArtifactJoin(Base):
     artist = pw.ForeignKeyField(Artist, backref='artist_artifacts')
     artifact = pw.ForeignKeyField(Artifact, backref='artifact_artists')
 
-    class Meta:
+    class Meta(Base.Meta):
         table_name = 'artist_artifact_join'
         indexes = (
             (('artist', 'artifact'), True),  # Unique constraint on artist and artifact
@@ -92,7 +92,7 @@ class ExhibitionArtifactJoin(Base):
     exhibition = pw.ForeignKeyField(Exhibition, backref='exhibition_artifacts')
     artifact = pw.ForeignKeyField(Artifact, backref='artifact_exhibitions')
 
-    class Meta:
+    class Meta(Base.Meta):
         table_name = 'exhibition_artifact_join'
         indexes = (
             (('exhibition', 'artifact'), True),  # Unique constraint on exhibition and artifact
@@ -117,7 +117,7 @@ class UserRoleJoin(Base):
     user = pw.ForeignKeyField(User, backref='user_roles')
     role = pw.ForeignKeyField(Role, backref='role_users')
 
-    class Meta:
+    class Meta(Base.Meta):
         table_name = 'user_role_join'
         indexes = (
             (('user', 'role'), True),  # Unique constraint on user and role

@@ -1,19 +1,7 @@
 import peewee as pw
 from gallery.db import db
 from .base_model import Base
-
-# class Base(pw.Model):
-#     class Meta:
-#         database = db  # This model uses the "database.db" database.
-
-# example model
-# class Person(Model):
-#     name = pw.CharField()
-#     birthday = pw.DateField()
-
-#     class Meta:
-#         database = db # This model uses the "people.db" database.
-
+from peewee import ManyToManyField
 
 __all__ = [
     "Base",
@@ -22,12 +10,10 @@ __all__ = [
     "Artist",
     "Artifact",
     "ArtifactType",
-    "ArtistArtifactJoin",
     "Image",
     "Exhibition",
-    "ExhibitionArtifactJoin",
     "User",
-    "Comment",
+    "Comment",  # Removed ExhibitionArtifactJoin from __all__
 ]
 
 class Region(Base):
@@ -45,7 +31,7 @@ class Tribe(Base):
 
 class Artist(Base):
     id = pw.AutoField()
-    name = pw.TextField(unique=True)
+    name = pw.TextField()
     region = pw.ForeignKeyField(Region, backref='artists')
     tribe = pw.ForeignKeyField(Tribe, backref='artists')
     created_datetime = pw.DateTimeField()
@@ -58,7 +44,7 @@ class ArtifactType(Base):
     created_datetime = pw.DateTimeField()
     modified_datetime = pw.DateTimeField()
 
-    class Meta: # Your lsp is gaslighting you this is fine
+    class Meta: # your lsp is gaslighting you this is fine
         table_name = 'artifact_type'
 
 class Artifact(Base):
@@ -70,19 +56,7 @@ class Artifact(Base):
     artifact_type = pw.ForeignKeyField(ArtifactType, backref='artifacts', null=True)
     created_datetime = pw.DateTimeField()
     modified_datetime = pw.DateTimeField()
-
-class ArtistArtifactJoin(Base):
-    artist = pw.ForeignKeyField(Artist, backref='artist_artifacts')
-    artifact = pw.ForeignKeyField(Artifact, backref='artifact_artists')
-    created_datetime = pw.DateTimeField()
-    modified_datetime = pw.DateTimeField()
-
-    class Meta:
-        table_name = 'artist_artifact_join'
-        indexes = (
-            (('artist', 'artifact'), True),  # Unique constraint on artist and artifact
-        )
-        primary_key = pw.CompositeKey('artist', 'artifact')
+    artists = ManyToManyField(Artist, backref='artifacts')  # Place ManyToManyField here
 
 class Image(Base):
     id = pw.AutoField()
@@ -101,19 +75,7 @@ class Exhibition(Base):
     start_date = pw.DateField()
     end_date = pw.DateField()
     location = pw.TextField()
-
-class ExhibitionArtifactJoin(Base):
-    exhibition = pw.ForeignKeyField(Exhibition, backref='exhibition_artifacts')
-    artifact = pw.ForeignKeyField(Artifact, backref='artifact_exhibitions')
-    created_datetime = pw.DateTimeField()
-    modified_datetime = pw.DateTimeField()
-
-    class Meta:
-        table_name = 'exhibition_artifact_join'
-        indexes = (
-            (('exhibition', 'artifact'), True),  # Unique constraint on exhibition and artifact
-        )
-        primary_key = pw.CompositeKey('exhibition', 'artifact')
+    artifacts = ManyToManyField(Artifact, backref='exhibitions')  # Add ManyToManyField here
 
 class Role(Base):
     id = pw.AutoField()
@@ -131,26 +93,13 @@ class User(Base):
     password_hash = pw.TextField()  
     created_datetime = pw.DateTimeField()
     modified_datetime = pw.DateTimeField()
-
-class UserRoleJoin(Base):
-    user = pw.ForeignKeyField(User, backref='user_roles')
-    role = pw.ForeignKeyField(Role, backref='role_users')
-    created_datetime = pw.DateTimeField()
-    modified_datetime = pw.DateTimeField()
-
-    class Meta:
-        table_name = 'user_role_join'
-        indexes = (
-            (('user', 'role'), True),  # Unique constraint on user and role
-        )
-        primary_key = pw.CompositeKey('user', 'role')
+    roles = ManyToManyField(Role, backref='users')
 
 class Comment(Base):
     id = pw.AutoField()
     content = pw.TextField()
     author = pw.ForeignKeyField(User, backref='comments')  # Link to the user who made the comment
     artifact = pw.ForeignKeyField(Artifact, backref='comments')  # Optional link to an artifact
-    date_posted = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')])  # Automatically set to current timestamp
     parent_comment = pw.ForeignKeyField('self', backref='comments', null=True)  # Self-referential foreign key for replies
     created_datetime = pw.DateTimeField()
     modified_datetime = pw.DateTimeField()
@@ -158,3 +107,8 @@ class Comment(Base):
     @property
     def is_top_level(self): # because i can't get generated properties to work with peewee 
         return self.parent_comment is None
+
+# After all model definitions, initialize the M2M tables
+ArtifactArtistThrough = Artifact.artists.get_through_model()
+UserRoleThrough = User.roles.get_through_model()
+ExhibitionArtifactThrough = Exhibition.artifacts.get_through_model()  # Add this line

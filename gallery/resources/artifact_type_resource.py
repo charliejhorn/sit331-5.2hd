@@ -6,20 +6,34 @@ class ArtifactTypeResource:
         self.dal = dal
 
     def on_get(self, req, resp):
-        artifacts = self.dal.get_all_artifacts()
+        types = self.dal.get_all_types()
 
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_200
-        resp.media = artifacts
+        resp.media = types 
 
     def on_post(self, req, resp):
-        newArtifact = req.get_media()
-        pprint(newArtifact)
+        new_type = req.get_media()
         
-        createdArtifact = self.dal.add_new_artifact(newArtifact)
+        created_type = self.dal.add_new_artifact(new_type)
         
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_201
-        resp.media = createdArtifact
-        resp.location = '/api/artifacts/' + createdArtifact["id"]
+        resp.media = created_type
+        resp.location = '/api/artifact_types/' + created_type["id"]
         
+    def on_get_item(self, req, resp, id):
+        image = self.dal.get_type(id)
+
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+        resp.media = image
+
+    def on_update_item(self, req, resp, id):
+        image = self.dal.update_type(id, req.get_media)
+
+        resp.status = HTTP_201
+
+    def on_delete_item(self, req, resp, id):
+        self.dal.delete_type(id)
+        resp.status = HTTP_201

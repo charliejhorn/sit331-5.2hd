@@ -46,7 +46,7 @@ app.add_route('/api/artifact-types', ArtifactTypeResource(ArtifactTypeDataAccess
 app.add_route('/api/artists', ArtistResource(ArtistDataAccess))
 
 app.add_route('/api/comments', CommentResource(CommentDataAccess))
-app.add_route('/api/comments/{id}', CommentResource(CommentDataAccess), suffix='item')
+app.add_route('/api/comments/{id}', CommentResource(CommentDataAccess), suffix='_item')
 
 
 app.add_route('/api/exhibitions', ExhibitionResource(ExhibitionDataAccess))

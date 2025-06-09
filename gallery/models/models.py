@@ -32,20 +32,20 @@ __all__ = [
 
 class Region(Base):
     id = pw.AutoField()
-    name = pw.TextField()
+    name = pw.TextField(unique=True)
     created_datetime = pw.DateTimeField()
     modified_datetime = pw.DateTimeField()
 
 class Tribe(Base):
     id = pw.AutoField()
-    name = pw.TextField()
+    name = pw.TextField(unique=True)
     region = pw.ForeignKeyField(Region, backref="tribes")
     created_datetime = pw.DateTimeField()
     modified_datetime = pw.DateTimeField()
 
 class Artist(Base):
     id = pw.AutoField()
-    name = pw.TextField()
+    name = pw.TextField(unique=True)
     region = pw.ForeignKeyField(Region, backref='artists')
     tribe = pw.ForeignKeyField(Tribe, backref='artists')
     created_datetime = pw.DateTimeField()
@@ -53,7 +53,7 @@ class Artist(Base):
 
 class ArtifactType(Base):
     id = pw.AutoField()
-    name = pw.TextField()
+    name = pw.TextField(unique=True)
     description = pw.TextField(null=True)
     created_datetime = pw.DateTimeField()
     modified_datetime = pw.DateTimeField()
@@ -63,7 +63,7 @@ class ArtifactType(Base):
 
 class Artifact(Base):
     id = pw.AutoField()
-    title = pw.TextField()
+    title = pw.TextField(unique=True)
     description = pw.TextField(null=True)
     date_authored = pw.DateField(null=True) # authored specified to not confuse with a possible create_date for db objects
     display_location = pw.TextField(null=True)
@@ -86,7 +86,7 @@ class ArtistArtifactJoin(Base):
 
 class Image(Base):
     id = pw.AutoField()
-    url = pw.TextField()  # URL to the image file
+    url = pw.TextField(unique=True)  # URL to the image file
     height = pw.IntegerField(null=True)  # Height of the image in pixels
     width = pw.IntegerField(null=True)  # Width of the image in pixels
     rights = pw.TextField(null=True)  # Rights information for the image
@@ -96,7 +96,7 @@ class Image(Base):
 
 class Exhibition(Base):
     id = pw.AutoField()
-    name = pw.TextField()
+    name = pw.TextField(unique=True)
     description = pw.TextField(null=True)
     start_date = pw.DateField()
     end_date = pw.DateField()

@@ -1,25 +1,59 @@
 from pprint import pprint
-from falcon import MEDIA_JSON, HTTP_200, HTTP_201
+from falcon import MEDIA_JSON, HTTP_200, HTTP_201, HTTP_404, HTTP_204
 
 class RegionResource:
     def __init__(self, dal) -> None:
-        self.dal = dal
+        self.dal = dal()
 
     def on_get(self, req, resp):
-        artifacts = self.dal.get_all_artifacts()
+        # get all regions
+        regions = self.dal.get_all_regions()
 
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_200
-        resp.media = artifacts
+        resp.media = regions
 
     def on_post(self, req, resp):
-        newArtifact = req.get_media()
-        pprint(newArtifact)
+        # create new region
+        new_region = req.get_media()
+        pprint(new_region)
         
-        createdArtifact = self.dal.add_new_artifact(newArtifact)
+        created_region = self.dal.add_new_region(new_region)
         
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_201
-        resp.media = createdArtifact
-        resp.location = '/api/artifacts/' + createdArtifact["id"]
+        resp.media = created_region
+        resp.location = '/api/regions/' + str(created_region["id"])
+
+    def on_get_by_id(self, req, resp, id):
+        # get region by id
+        try:
+            region = self.dal.get_region_by_id(id)
+            resp.content_type = MEDIA_JSON
+            resp.status = HTTP_200
+            resp.media = region
+        except Exception:
+            resp.status = HTTP_404
+            resp.media = {"error": "Region not found"}
+
+    def on_put_by_id(self, req, resp, id):
+        # update region by id
+        try:
+            updated_data = req.get_media()
+            updated_region = self.dal.update_region_by_id(id, updated_data)
+            resp.content_type = MEDIA_JSON
+            resp.status = HTTP_200
+            resp.media = updated_region
+        except Exception:
+            resp.status = HTTP_404
+            resp.media = {"error": "Region not found"}
+
+    def on_delete_by_id(self, req, resp, id):
+        # delete region by id
+        try:
+            self.dal.delete_region_by_id(id)
+            resp.status = HTTP_204
+        except Exception:
+            resp.status = HTTP_404
+            resp.media = {"error": "Region not found"}
         

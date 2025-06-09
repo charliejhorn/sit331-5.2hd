@@ -9,15 +9,35 @@
  
 ## Bounded Contexts
 - [ ] Artifact
+    - [ ] resource   
+    - [ ] da   
 - [ ] ArtifactType
+    - [ ] resource   
+    - [ ] da   
 - [ ] Artist
+    - [ ] resource   
+    - [ ] da   
 - [ ] Comment
+    - [ ] resource   
+    - [ ] da   
 - [ ] Exhibition
+    - [ ] resource   
+    - [ ] da   
 - [ ] Image
+    - [ ] resource   
+    - [ ] da   
 - [ ] Region
+    - [ ] resource   
+    - [ ] da   
 - [ ] Role
+    - [ ] resource   
+    - [ ] da   
 - [ ] Tribe
+    - [ ] resource   
+    - [ ] da   
 - [ ] User
+    - [ ] resource   
+    - [ ] da   
 
 ## Maybe
 - [ ] frontend

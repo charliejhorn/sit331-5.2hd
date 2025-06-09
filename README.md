@@ -6,7 +6,7 @@
 - **orm:** peewee
 - **frontend:** tbd
 - **documentation engine:** doxygen
-- **auth:** OAuth 2.0
+- **auth** Basic Auth
 - **spatial data:** SpatiaLite (sqlite extension, if needed)
 - **testing:** falcon's inbuilt testing & pytest
 - **hashing:** bcrypt
